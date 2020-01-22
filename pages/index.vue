@@ -76,32 +76,27 @@
         } else {
           return false
         }
+      },
+      changeCount () {
+        this.products.forEach((item) => {
+          if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
+            ++this.count
+          }
+        })
       }
     },
     watch: {
       selectCategory () {
         this.count = 0
-        this.products.forEach((item) => {
-          if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
-            ++this.count
-          }
-        })
+        this.changeCount()
       },
       selectBrand () {
         this.count = 0
-        this.products.forEach((item) => {
-          if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
-            ++this.count
-          }
-        })
+        this.changeCount()
       },
     },
      created() {
-       this.products.forEach((item) => {
-         if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
-           ++this.count
-         }
-       })
+       this.changeCount()
      }
   }
 </script>
