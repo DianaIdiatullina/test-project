@@ -32,16 +32,16 @@
       </v-col>
 
       <v-col cols="12" sm="6">
-        <ul v-if="selectCategory.length > 0 || selectBrand.length > 0">
+        <div class="mb-4">{{ count }} {{ count | getWordItem }}</div>
+        <ul>
           <li
             v-for="product in products"
-            v-if="selectCategory.includes(product.category) || selectBrand.includes(product.brand)"
-          >{{ product.name }}</li>
-        </ul>
-        <ul v-if="selectCategory.length === 0 && selectBrand.length === 0">
-          <li
-            v-for="product in products"
-          >{{ product.name }}</li>
+            v-if="isCorrectCategory(product.category) && isCorrectBrand(product.brand)"
+          >
+            <nuxt-link :to="`/${product.id}`">
+              {{ product.name }}, {{ product.category }}, {{ product.brand }}
+            </nuxt-link>
+          </li>
         </ul>
       </v-col>
     </v-row>
@@ -54,12 +54,54 @@
       return {
         selectCategory: [],
         selectBrand: [],
-        products: this.$store.state.products
+        products: this.$store.state.products,
+        count: 0
       }
     },
-    // created() {
-    //   console.log(this.selectCategory)
-    //   console.log(this.selectBrand)
-    // }
+    methods: {
+      isCorrectCategory (category) {
+        if (this.selectCategory.length === 0) {
+          return  true
+        } else if (this.selectCategory.includes(category)) {
+          return  true
+        } else {
+          return false
+        }
+      },
+      isCorrectBrand (brand) {
+        if (this.selectBrand.length === 0) {
+          return  true
+        } else if (this.selectBrand.includes(brand)) {
+          return  true
+        } else {
+          return false
+        }
+      }
+    },
+    watch: {
+      selectCategory () {
+        this.count = 0
+        this.products.forEach((item) => {
+          if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
+            ++this.count
+          }
+        })
+      },
+      selectBrand () {
+        this.count = 0
+        this.products.forEach((item) => {
+          if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
+            ++this.count
+          }
+        })
+      },
+    },
+     created() {
+       this.products.forEach((item) => {
+         if (this.isCorrectCategory(item.category) && this.isCorrectBrand(item.brand)) {
+           ++this.count
+         }
+       })
+     }
   }
 </script>
